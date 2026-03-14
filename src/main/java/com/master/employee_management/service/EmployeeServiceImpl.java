@@ -48,6 +48,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public List<Employee> searchEmployees(String keyword) {
+        if(keyword == null || keyword.trim().isEmpty()) {
+            return employeeRepository.findAll();
+        }
+        return employeeRepository.search(keyword.trim());
+    }
+
+    @Override
     public Optional<Employee> findByEmail(String email) {
         return employeeRepository.findByEmail(email);
     }

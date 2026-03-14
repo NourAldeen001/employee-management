@@ -18,8 +18,10 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @GetMapping
-    public String listEmployees(Model model) {
-        model.addAttribute("employees", employeeService.getAllEmployees());
+    public String listEmployees(@RequestParam(required = false) String keyword,
+                                Model model) {
+        model.addAttribute("employees", employeeService.searchEmployees(keyword));
+        model.addAttribute("keyword", keyword);
         return "employees/list";
     }
 
