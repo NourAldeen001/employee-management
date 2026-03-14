@@ -10,6 +10,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -26,12 +27,12 @@ public class Employee {
     private Long id;
 
     @NotBlank(message = "First name is required")
-    @Size(min = 6, max = 50, message = "First name must be between 6 to 50")
+    @Size(min = 2, max = 50, message = "First name must be between 6 to 50")
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
     @NotBlank(message = "Last name is required")
-    @Size(min = 6, max = 50, message = "First name must be between 6 to 50")
+    @Size(min = 2, max = 50, message = "First name must be between 6 to 50")
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
@@ -46,7 +47,7 @@ public class Employee {
 
     @NotNull(message = "Salary is required")
     @Positive(message = "Salary must be positive")
-    private Double salary;
+    private BigDecimal salary;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)

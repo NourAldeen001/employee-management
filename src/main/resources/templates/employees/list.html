@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="fragments/layout :: layout(~{::title}, ~{::section})">
+<head >
+    <title>Employees</title>
+</head>
+<body>
+    <section>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>Employees</h2>
+            <a href="/employees/new" class="btn btn-primary"> + Add Employee </a>
+        </div>
+
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Department</th>
+                    <th>Salary</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="tempEmployee : ${employees}">
+                    <td th:text="${tempEmployee.firstName}"></td>
+                    <td th:text="${tempEmployee.lastName}"></td>
+                    <td th:text="${tempEmployee.email}"></td>
+                    <td th:text="${tempEmployee.department}"></td>
+                    <td th:text="${'$' + tempEmployee.salary}"></td>
+                    <td>
+                        <a th:href="@{/employees/{id}/edit(id=${tempEmployee.id})}"
+                           class="btn btn-sm btn-warning">Edit</a>
+                        <a th:href="@{/employees/{id}/delete(id=${tempEmployee.id})}"
+                           class="btn btn-sm btn-danger"
+                           onclick="return confirm('Are you sure?')">Delete</a>
+                    </td>
+                </tr>
+                <!-- Empty State -->
+                <tr th:if="${#lists.isEmpty(employees)}">
+                    <td colspan="6" class="text-center text-muted"> No employees found</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</body>
+</html>
