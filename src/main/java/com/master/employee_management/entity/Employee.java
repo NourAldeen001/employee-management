@@ -21,32 +21,31 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class Employee {
-
+    /// Entity - Focuses on DB Constraints
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "First name is required")
-    @Size(min = 2, max = 50, message = "First name must be between 6 to 50")
+    @NotBlank
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @NotBlank(message = "Last name is required")
-    @Size(min = 2, max = 50, message = "First name must be between 6 to 50")
+    @NotBlank
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @NotBlank(message = "Email is required")
-    @Email(message = "Invalid email format")
+    @NotBlank
+    @Email
     @Column(nullable = false, unique = true)
     private String email;
 
-    @NotBlank(message = "Department is required")
+    @NotBlank
     @Column(nullable = false)
     private String department;
 
-    @NotNull(message = "Salary is required")
-    @Positive(message = "Salary must be positive")
+    @NotNull
+    @Positive
+    @Column(precision = 10, scale = 2, nullable = false)
     private BigDecimal salary;
 
     @CreatedDate
