@@ -3,6 +3,7 @@ package com.master.employee_management.controller;
 import com.master.employee_management.dto.EmployeeRequestDTO;
 import com.master.employee_management.entity.Employee;
 import com.master.employee_management.exception.DuplicateEmailException;
+import com.master.employee_management.exception.EmployeeNotFoundException;
 import com.master.employee_management.mapper.EmployeeMapper;
 import com.master.employee_management.service.EmployeeService;
 import jakarta.validation.Valid;
@@ -38,7 +39,7 @@ public class EmployeeController {
 
     // Process Add Form
     @PostMapping
-    public String processAddForm(@Valid @ModelAttribute EmployeeRequestDTO employeeRequestDTO,
+    public String processAddForm(@Valid @ModelAttribute("employee") EmployeeRequestDTO employeeRequestDTO,
                                  BindingResult result,
                                  RedirectAttributes redirectAttributes) {
         // Check Validation errors
@@ -59,29 +60,39 @@ public class EmployeeController {
 
     // Show Edit Form
     @GetMapping("{id}/edit")
-    public String showEditForm(@PathVariable Long id, Model model) {
-        Employee employee = employeeService.getEmployeeById(id);
-        // Map Entity -> RequestDTO to pre-fill the form
-        EmployeeRequestDTO employeeRequestDTO = EmployeeRequestDTO.builder()
-                .firstName(employee.getFirstName())
-                .lastName(employee.getLastName())
-                .email(employee.getEmail())
-                .department(employee.getDepartment())
-                .salary(employee.getSalary())
-                .build();
-        model.addAttribute("employee", employeeRequestDTO);
-        model.addAttribute("employeeId", id); // Edit mode signal
-        return "employees/form";
+    public String showEditForm(@PathVariable Long id,
+                               Model model,
+                               RedirectAttributes redirectAttributes) {
+        try {
+            Employee employee = employeeService.getEmployeeById(id);
+            // Map Entity -> RequestDTO to pre-fill the form
+            EmployeeRequestDTO employeeRequestDTO = EmployeeRequestDTO.builder()
+                    .firstName(employee.getFirstName())
+                    .lastName(employee.getLastName())
+                    .email(employee.getEmail())
+                    .department(employee.getDepartment())
+                    .salary(employee.getSalary())
+                    .build();
+            model.addAttribute("employee", employeeRequestDTO);
+            model.addAttribute("employeeId", id); // Edit mode signal
+            return "employees/form";
+        }
+        catch(EmployeeNotFoundException ex) {
+            redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
+            return "redirect:/employees";
+        }
     }
 
     // Process Edit Form
     @PostMapping("{id}/edit")
     public String processEditForm(@PathVariable Long id,
-                                  @Valid @ModelAttribute EmployeeRequestDTO employeeRequestDTO,
+                                  @Valid @ModelAttribute("employee") EmployeeRequestDTO employeeRequestDTO,
                                   BindingResult result,
+                                  Model model,
                                   RedirectAttributes redirectAttributes){
         // Check Validation errors
         if(result.hasErrors()) {
+            model.addAttribute("employeeId", id);
             return "employees/form";
         }
         // Check email duplicate (for update)
@@ -92,15 +103,25 @@ public class EmployeeController {
         }
         catch(DuplicateEmailException ex) {
             result.rejectValue("email", "error.employee", ex.getMessage());
+            model.addAttribute("employeeId", id);
             return "employees/form";
+        }
+        catch(EmployeeNotFoundException ex) {
+            redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
+            return "redirect:/employees";
         }
     }
 
     @GetMapping("/{id}/delete")
     public String deleteEmployee(@PathVariable Long id,
                                  RedirectAttributes redirectAttributes) {
-        employeeService.deleteEmployee(id);
-        redirectAttributes.addFlashAttribute("successMessage", "Employee deleted successfully!");
+        try {
+            employeeService.deleteEmployee(id);
+            redirectAttributes.addFlashAttribute("successMessage", "Employee deleted successfully!");
+        }
+        catch(EmployeeNotFoundException ex) {
+            redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
+        }
         return "redirect:/employees";
     }
 }

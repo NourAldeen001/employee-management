@@ -19,6 +19,10 @@
              class="alert alert-success"
              th:text="${successMessage}">
         </div>
+        <div th:if="${errorMessage}"
+             class="alert alert-danger"
+             th:text="${errorMessage}">
+        </div>
     </div>
 
     <!-- Page Content -->
