@@ -2,6 +2,7 @@ package com.master.employee_management.controller;
 
 import com.master.employee_management.dto.EmployeeRequestDTO;
 import com.master.employee_management.entity.Employee;
+import com.master.employee_management.exception.DuplicateEmailException;
 import com.master.employee_management.mapper.EmployeeMapper;
 import com.master.employee_management.service.EmployeeService;
 import jakarta.validation.Valid;
@@ -45,13 +46,15 @@ public class EmployeeController {
             return "employees/form"; // send back to form with errors shown
         }
         // Check email duplicate (for create)
-        if(employeeService.existsByEmail(employeeRequestDTO.getEmail())) {
-            result.rejectValue("email", "error.employee", "Email already exists");
+        try {
+            employeeService.saveEmployee(employeeMapper.toEntity(employeeRequestDTO));
+            redirectAttributes.addFlashAttribute("successMessage", "Employee added successfully!");
+            return "redirect:/employees";
+        }
+        catch(DuplicateEmailException ex) {
+            result.rejectValue("email", "error.employee", ex.getMessage());
             return "employees/form"; // send back to form with errors shown
         }
-        employeeService.saveEmployee(employeeMapper.toEntity(employeeRequestDTO));
-        redirectAttributes.addFlashAttribute("successMessage", "Employee added successfully!");
-        return "redirect:/employees";
     }
 
     // Show Edit Form
@@ -67,7 +70,7 @@ public class EmployeeController {
                 .salary(employee.getSalary())
                 .build();
         model.addAttribute("employee", employeeRequestDTO);
-        model.addAttribute("employeeId", id); // pass id for form action
+        model.addAttribute("employeeId", id); // Edit mode signal
         return "employees/form";
     }
 
@@ -82,13 +85,15 @@ public class EmployeeController {
             return "employees/form";
         }
         // Check email duplicate (for update)
-        if(employeeService.existsByEmailAndIdNot(employeeRequestDTO.getEmail(), id)) {
-            result.rejectValue("email", "error.employee", "Email already exists");
+        try {
+            employeeService.updateEmployee(id, employeeMapper.toEntity(employeeRequestDTO));
+            redirectAttributes.addFlashAttribute("successMessage", "Employee updated successfully!");
+            return "redirect:/employees";
+        }
+        catch(DuplicateEmailException ex) {
+            result.rejectValue("email", "error.employee", ex.getMessage());
             return "employees/form";
         }
-        employeeService.updateEmployee(id, employeeMapper.toEntity(employeeRequestDTO));
-        redirectAttributes.addFlashAttribute("successMessage", "Employee updated successfully!");
-        return "redirect:/employees";
     }
 
     @GetMapping("/{id}/delete")

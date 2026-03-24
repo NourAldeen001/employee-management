@@ -49,11 +49,7 @@ public class EmployeeRestController {
     @PostMapping
     public ResponseEntity<EmployeeResponseDTO> createEmployee(
             @Valid @RequestBody EmployeeRequestDTO employeeRequestDTO) {
-
-        if(employeeService.existsByEmail(employeeRequestDTO.getEmail())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
-
+        // no need to check duplicate - Service handle it
         Employee saved = employeeService.saveEmployee(
                 employeeMapper.toEntity(employeeRequestDTO)
         );
@@ -65,11 +61,7 @@ public class EmployeeRestController {
     public ResponseEntity<EmployeeResponseDTO> updateEmployee(
             @PathVariable Long id,
             @Valid @RequestBody EmployeeRequestDTO employeeRequestDTO) {
-
-        if(employeeService.existsByEmailAndIdNot(employeeRequestDTO.getEmail(), id)) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
-
+        // no need to check duplicate - Service handle it
         Employee updated = employeeService.updateEmployee(
                 id, employeeMapper.toEntity(employeeRequestDTO)
         );

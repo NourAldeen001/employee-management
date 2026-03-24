@@ -1,6 +1,8 @@
 package com.master.employee_management.service;
 
 import com.master.employee_management.entity.Employee;
+import com.master.employee_management.exception.DuplicateEmailException;
+import com.master.employee_management.exception.EmployeeNotFoundException;
 import com.master.employee_management.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,7 +13,8 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
-
+    ///  business logic belongs in the Service
+    ///  Owns the rule, throws exception
     private final EmployeeRepository employeeRepository;
 
     @Override
@@ -22,18 +25,23 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee getEmployeeById(Long id) {
         return employeeRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Employee not found with id: " + id));
+                .orElseThrow(() -> new EmployeeNotFoundException(id));
     }
 
     @Override
     public Employee saveEmployee(Employee employee) {
+        if(employeeRepository.existsByEmail(employee.getEmail())) {
+            throw new DuplicateEmailException(employee.getEmail());
+        }
         return employeeRepository.save(employee);
     }
 
     @Override
     public Employee updateEmployee(Long id, Employee employee) {
         Employee existing = getEmployeeById(id);
+        if(employeeRepository.existsByEmailAndIdNot(employee.getEmail(), id)) {
+            throw new DuplicateEmailException(employee.getEmail());
+        }
         existing.setFirstName(employee.getFirstName());
         existing.setLastName(employee.getLastName());
         existing.setEmail(employee.getEmail());
