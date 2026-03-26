@@ -112,7 +112,7 @@ public class EmployeeController {
         }
     }
 
-    @GetMapping("/{id}/delete")
+    @PostMapping("/{id}/delete")
     public String deleteEmployee(@PathVariable Long id,
                                  RedirectAttributes redirectAttributes) {
         try {
