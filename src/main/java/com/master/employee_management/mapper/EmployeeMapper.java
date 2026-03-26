@@ -8,6 +8,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class EmployeeMapper {
 
+    /// Entity -> RequestDTO to pre-fill the form
+    public EmployeeRequestDTO toRequestDTO(Employee employee) {
+        return EmployeeRequestDTO.builder()
+                .firstName(employee.getFirstName())
+                .lastName(employee.getLastName())
+                .email(employee.getEmail())
+                .department(employee.getDepartment())
+                .salary(employee.getSalary())
+                .build();
+    }
+
     /// Entity -> ResponseDTO (for sending data out)
     public EmployeeResponseDTO toResponseDTO(Employee employee) {
         return EmployeeResponseDTO.builder()

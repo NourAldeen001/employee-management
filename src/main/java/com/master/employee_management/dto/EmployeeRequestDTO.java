@@ -17,11 +17,11 @@ public class EmployeeRequestDTO {
     /// DTO - Focuses on Input Validation
     /// What client send IN
     @NotBlank(message = "First name is required")
-    @Size(min = 2, max = 50, message = "First name must be between 6 to 50")
+    @Size(min = 2, max = 50, message = "First name must be between 6 to 50 characters")
     private String firstName;
 
     @NotBlank(message = "Last name is required")
-    @Size(min = 2, max = 50, message = "First name must be between 6 to 50")
+    @Size(min = 2, max = 50, message = "First name must be between 6 to 50 characters")
     private String lastName;
 
     @NotBlank(message = "Email is required")

@@ -65,15 +65,7 @@ public class EmployeeController {
                                RedirectAttributes redirectAttributes) {
         try {
             Employee employee = employeeService.getEmployeeById(id);
-            // Map Entity -> RequestDTO to pre-fill the form
-            EmployeeRequestDTO employeeRequestDTO = EmployeeRequestDTO.builder()
-                    .firstName(employee.getFirstName())
-                    .lastName(employee.getLastName())
-                    .email(employee.getEmail())
-                    .department(employee.getDepartment())
-                    .salary(employee.getSalary())
-                    .build();
-            model.addAttribute("employee", employeeRequestDTO);
+            model.addAttribute("employee", employeeMapper.toRequestDTO(employee));
             model.addAttribute("employeeId", id); // Edit mode signal
             return "employees/form";
         }
