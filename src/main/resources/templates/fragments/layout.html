@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
       th:fragment="layout(title, content)">
 <head>
     <meta charset="UTF-8"/>
@@ -11,6 +12,26 @@
     <!-- Navbar -->
     <nav class="navbar navbar-dark bg-dark px-4">
         <a class="navbar-brand" href="/employees">🏢 Employee Management</a>
+
+        <div class="d-flex align-items-center gap-3">
+            <!-- Show logged in user -->
+            <span class="text-white"
+                  sec:authentication="name">
+        </span>
+
+            <!-- Show role -->
+            <span class="badge bg-secondary"
+                  sec:authorize="hasRole('ADMIN')">ADMIN</span>
+            <span class="badge bg-secondary"
+                  sec:authorize="hasRole('USER')">USER</span>
+
+            <!-- Logout -->
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="btn btn-outline-light btn-sm">
+                    Logout
+                </button>
+            </form>
+        </div>
     </nav>
 
     <!-- Flash Messages -->

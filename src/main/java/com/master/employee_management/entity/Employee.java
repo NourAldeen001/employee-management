@@ -56,7 +56,4 @@ public class Employee {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    @Enumerated(value = EnumType.STRING)
-    @Column(nullable = false)
-    private Role role;
 }

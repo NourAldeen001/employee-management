@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
       th:replace="fragments/layout :: layout(~{::title}, ~{::section})">
 <head >
     <title>Employees</title>
@@ -8,7 +8,9 @@
     <section>
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h2>Employees</h2>
-            <a href="/employees/new" class="btn btn-primary"> + Add Employee </a>
+            <div sec:authorize="hasRole('ADMIN')">
+                <a href="/employees/new" class="btn btn-primary">+ Add Employee</a>
+            </div>
         </div>
 
         <!-- Search Bar -->
@@ -48,11 +50,13 @@
                     <td th:text="${tempEmployee.department}"></td>
                     <td th:text="${'$' + tempEmployee.salary}"></td>
                     <td>
-                        <a th:href="@{/employees/{id}/edit(id=${tempEmployee.id})}"
-                           class="btn btn-sm btn-warning">Edit</a>
-                        <a th:href="@{/employees/{id}/delete(id=${tempEmployee.id})}"
-                           class="btn btn-sm btn-danger"
-                           onclick="return confirm('Are you sure?')">Delete</a>
+                        <div sec:authorize="hasRole('ADMIN')">
+                            <a th:href="@{/employees/{id}/edit(id=${tempEmployee.id})}"
+                               class="btn btn-sm btn-warning">Edit</a>
+                            <a th:href="@{/employees/{id}/delete(id=${tempEmployee.id})}"
+                               class="btn btn-sm btn-danger"
+                               onclick="return confirm('Are you sure?')">Delete</a>
+                        </div>
                     </td>
                 </tr>
                 <!-- Empty State -->
