@@ -12,6 +12,8 @@ import java.util.Optional;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
+    @Query("SELECT COUNT(DISTINCT emp.department) FROM Employee emp")
+    long countDistinctDepartments();
     @Query("SELECT emp FROM Employee emp WHERE " +
             "LOWER(emp.firstName) like LOWER(CONCAT('%', :keyword, '%')) OR " +
             "LOWER(emp.lastName) like LOWER(CONCAT('%', :keyword, '%')) OR " +

@@ -54,10 +54,10 @@
                 <div class="invalid-feedback" th:errors="*{salary}"></div>
             </div>
 
-            <button type="submit" class="btn btn-success"
+            <button type="submit" class="btn btn-success my-4"
                     th:text="${employeeId == null} ? 'Add Employee' : 'Update Employee'">
             </button>
-            <a href="/employees" class="btn btn-secondary">Cancel</a>
+            <a href="/employees" class="btn btn-secondary my-4 ms-4">Cancel</a>
         </form>
     </section>
 </body>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Admin Dashboard</title>
+</head>
+<body>
+<section>
+    <h2 class="mb-4">Admin Dashboard</h2>
+
+    <!-- Stats Cards -->
+    <div class="row g-4 mb-5">
+
+        <div class="col-md-3">
+            <div class="card text-white bg-primary shadow">
+                <div class="card-body">
+                    <h6 class="card-title">Total Employees</h6>
+                    <h2 th:text="${stats.totalEmployees}">0</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-white bg-success shadow">
+                <div class="card-body">
+                    <h6 class="card-title">Total Users</h6>
+                    <h2 th:text="${stats.totalUsers}">0</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-white bg-danger shadow">
+                <div class="card-body">
+                    <h6 class="card-title">Total Admins</h6>
+                    <h2 th:text="${stats.totalAdmins}">0</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-white bg-warning shadow">
+                <div class="card-body">
+                    <h6 class="card-title">Departments</h6>
+                    <h2 th:text="${stats.totalDepartments}">0</h2>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Quick Links -->
+    <h5 class="mb-3">Quick Actions</h5>
+    <div class="d-flex gap-3">
+        <a href="/employees" class="btn btn-outline-primary">View Employees</a>
+        <a href="/employees/new" class="btn btn-outline-success">Add Employee</a>
+        <a href="/admin/users" class="btn btn-outline-danger">Manage Users</a>
+        <a href="/admin/users/new" class="btn btn-outline-secondary">Add User</a>
+    </div>
+
+</section>
+</body>
+</html>

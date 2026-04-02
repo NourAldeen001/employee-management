@@ -75,6 +75,7 @@ public class SecurityConfig {
                         .requestMatchers("/error").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/login").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/employees/new", "/employees/*/edit", "/employees/*/delete").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

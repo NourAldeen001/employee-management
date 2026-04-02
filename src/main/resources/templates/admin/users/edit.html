@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Edit User Role</title>
+</head>
+<body>
+<section>
+    <h2 class="mb-4">Edit User Role</h2>
+
+    <form th:action="${'/admin/users/' + user.id + '/edit'}"
+          method="post"
+          class="mt-3">
+
+        <!-- Username — read only -->
+        <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input type="text"
+                   th:value="${user.username}"
+                   class="form-control"
+                   readonly/>
+        </div>
+
+        <!-- Role -->
+        <div class="mb-3">
+            <label class="form-label">Role</label>
+            <select name="role" class="form-select">
+                <option th:each="role : ${roles}"
+                        th:value="${role}"
+                        th:text="${role}"
+                        th:selected="${role == user.role}">
+                </option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success">Update Role</button>
+        <a href="/admin/users" class="btn btn-secondary">Cancel</a>
+
+    </form>
+</section>
+</body>
+</html>
